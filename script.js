@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const suggestionChips = document.querySelectorAll(".suggestion-chip");
   const fileUploadButton = document.getElementById("file-upload-button");
   const fileUploadInput = document.getElementById("file-upload");
+  const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+  const sidebar = document.querySelector(".sidebar");
 
   // OpenRouter API Key and Configuration
   const API_KEY =
@@ -101,6 +103,19 @@ document.addEventListener("DOMContentLoaded", () => {
         userInput.value = chip.textContent;
         handleSendMessage();
       });
+    });
+
+    // Mobile menu toggle functionality
+    mobileMenuToggle.addEventListener("click", toggleMobileSidebar);
+    
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener("click", (e) => {
+      if (window.innerWidth <= 768 && 
+          sidebar.classList.contains("mobile-active") && 
+          !sidebar.contains(e.target) && 
+          !mobileMenuToggle.contains(e.target)) {
+        closeMobileSidebar();
+      }
     });
 
     // Load chat history
@@ -254,6 +269,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Clear input and reset height
     userInput.value = "";
     userInput.style.height = "auto";
+
+    // Hide welcome message if it exists (first message)
+    const introMessage = document.querySelector(".intro-message");
+    if (introMessage) {
+      introMessage.remove();
+    }
 
     // If there's text, add it as a user message
     if (message) {
@@ -651,6 +672,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     saveChatHistory();
     updateChatHistorySidebar();
+    
+    // Close mobile sidebar when creating new chat
+    closeMobileSidebar();
+    
     // Clear pending file and its preview when a new chat is created
     pendingFile = null;
     const previewContainer = document.getElementById("pending-file-preview");
@@ -683,6 +708,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     updateActiveChatInSidebar();
+    
+    // Close mobile sidebar when loading a chat
+    closeMobileSidebar();
   }
 
   // Function to add formatted message to UI without typing effect
@@ -952,4 +980,39 @@ document.addEventListener("DOMContentLoaded", () => {
     userInput.style.height = "auto";
     userInput.style.height = userInput.scrollHeight + "px";
   }
+
+  // Mobile sidebar toggle functions
+  function toggleMobileSidebar() {
+    if (window.innerWidth <= 768) {
+      sidebar.classList.toggle("mobile-active");
+      
+      // Create or toggle overlay
+      let overlay = document.querySelector(".mobile-overlay");
+      if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.className = "mobile-overlay";
+        document.body.appendChild(overlay);
+        overlay.addEventListener("click", closeMobileSidebar);
+      }
+      
+      overlay.classList.toggle("active", sidebar.classList.contains("mobile-active"));
+    }
+  }
+
+  function closeMobileSidebar() {
+    if (window.innerWidth <= 768) {
+      sidebar.classList.remove("mobile-active");
+      const overlay = document.querySelector(".mobile-overlay");
+      if (overlay) {
+        overlay.classList.remove("active");
+      }
+    }
+  }
+
+  // Close sidebar on window resize if switching to desktop
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768) {
+      closeMobileSidebar();
+    }
+  });
 });

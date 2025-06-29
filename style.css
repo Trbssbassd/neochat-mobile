@@ -228,6 +228,23 @@ body {
   width: 16px;
 }
 
+/* Mobile menu toggle - hidden by default */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.mobile-menu-toggle:hover {
+  background-color: var(--background-tertiary);
+}
+
 /* Chat Container Styles */
 .chat-container {
   flex: 1;
@@ -659,4 +676,140 @@ pre code {
 
 .chat-options-item:hover {
   background-color: var(--background-secondary);
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 0;
+    height: 100vh;
+  }
+  
+  .app-container {
+    height: 100vh;
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    position: relative;
+  }
+  
+  /* Hide sidebar by default on mobile */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    border-right: 1px solid var(--border-color);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Show sidebar when active */
+  .sidebar.mobile-active {
+    left: 0;
+  }
+  
+  /* Show mobile menu toggle */
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  /* Chat container takes full width on mobile */
+  .chat-container {
+    width: 100%;
+  }
+  
+  /* Overlay for when sidebar is open */
+  .mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+  }
+  
+  .mobile-overlay.active {
+    display: block;
+  }
+  
+  /* Adjust message content max-width for mobile */
+  .message-content {
+    max-width: 95%;
+  }
+  
+  /* Make intro message more mobile-friendly */
+  .intro-message {
+    margin: 20px auto;
+    padding: 20px;
+  }
+  
+  .intro-message h1 {
+    font-size: 24px;
+  }
+  
+  /* Stack suggestion chips on mobile */
+  .suggestion-chips {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .suggestion-chip {
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  
+  /* Adjust input area for mobile */
+  .input-area {
+    padding: 10px 15px 15px;
+  }
+  
+  /* Make textarea and buttons more touch-friendly */
+  textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px;
+  }
+  
+  #send-button {
+    width: 44px;
+    min-height: 44px;
+  }
+  
+  #file-upload-button {
+    padding: 12px;
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Adjust chat header for mobile */
+  .chat-header {
+    padding: 10px 15px;
+  }
+  
+  .current-chat-title {
+    font-size: 16px;
+    margin-left: 10px;
+  }
+  
+  /* Make header actions more touch-friendly */
+  .header-actions button {
+    padding: 8px;
+    font-size: 18px;
+    min-height: 40px;
+    min-width: 40px;
+  }
+}
+
+/* Tablet adjustments */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .sidebar {
+    width: 220px;
+  }
+  
+  .message-content {
+    max-width: 85%;
+  }
 }
